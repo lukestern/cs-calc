@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace cs_calc
 {
@@ -11,33 +12,58 @@ namespace cs_calc
             Console.Write("\nPlease enter an operator (+, -, *, /): ");
             string operation = Console.ReadLine();
 
-            Console.Write("Please enter a number: ");
-            string firstValue = Console.ReadLine();
-            bool firstIntParsed = Int32.TryParse(firstValue, out int firstInt);
-            
-            Console.Write("Please enter another number: ");
-            string secondValue = Console.ReadLine();
-            bool secondIntParsed = Int32.TryParse(secondValue, out int secondInt);
+            Console.Write($"\nHow many numbers do you want to {operation}? ");
+            string repetitions = Console.ReadLine();
+            bool repetitionsParsed = Int32.TryParse(repetitions, out int repetitionsInt);
 
-            if (firstIntParsed && secondIntParsed)
+            int[] values = null;
+            if (repetitionsParsed)
             {
-                Console.WriteLine("Result:");
-                switch (operation)
+                values = new int[repetitionsInt];
+                for (int i = 0; i < values.Length; i++)
                 {
-                    case "+":
-                        Console.WriteLine(firstInt + secondInt);
-                        break;
-                    case "-":
-                        Console.WriteLine(firstInt - secondInt);
-                        break;
-                    case "*":
-                        Console.WriteLine(firstInt * secondInt);
-                        break;
-                    case "/":
-                        Console.WriteLine(firstInt / secondInt);
-                        break;
+                    Console.Write("Please enter a number: ");
+                    string valueStr = Console.ReadLine();
+                    bool valueParsed = Int32.TryParse(valueStr, out int valueInt);
+                    if (valueParsed)
+                    {
+                        values[i] = valueInt;
+                    }
                 }
             }
+
+            int result = values[0];
+            switch (operation)
+            {
+                case "+":
+                    for (int i = 1; i < values.Length; i++)
+                    {
+                        result += values[i];
+                    }
+                    break;
+                case "-":
+                    for (int i = 1; i < values.Length; i++)
+                    {
+                        result -= values[i];
+                    }
+                    break;
+                case "*":
+                    for (int i = 1; i < values.Length; i++)
+                    {
+                        result *= values[i];
+                    }
+                    break;
+                case "/":
+                    for (int i = 1; i < values.Length; i++)
+                    {
+                        result /= values[i];
+                    }
+                    break;
+                default:
+                    result = 0;
+                    break;
+            }
+            Console.Write($"Result: {result}");
 
         }
     }
